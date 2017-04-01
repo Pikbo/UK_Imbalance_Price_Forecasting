@@ -18,6 +18,9 @@ This model is setup to run an experiment on the sources of data.
 """
 
 import os
+path = 'C:/Users/adamd/Google Drive/ADG Efficiency/ML/virtualenvs/imbaENV/Scripts/activate_this.py'
+exec(open(path).read(), dict(__file__=path))
+
 import pandas as pd
 import numpy as np
 import sqlite3
