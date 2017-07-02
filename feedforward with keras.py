@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 ADG Efficiency
 2017-01-31
@@ -18,8 +19,8 @@ This model is setup to run an experiment on the sources of data.
 """
 
 import os
-path = 'C:/Users/adamd/Google Drive/ADG Efficiency/ML/virtualenvs/imbaENV/Scripts/activate_this.py'
-exec(open(path).read(), dict(__file__=path))
+#path = 'C:/Users/adamd/Google Drive/ADG Efficiency/ML/virtualenvs/imbaENV/Scripts/activate_this.py'
+#exec(open(path).read(), dict(__file__=path))
 
 import pandas as pd
 import numpy as np
@@ -56,7 +57,8 @@ from metrics import MASE
 
 # workaround found on stack overflow
 # http://stackoverflow.com/questions/40046619/keras-tensorflow-gives-the-error-no-attribute-control-flow-ops
-tf.python.control_flow_ops = tf
+#tf.python.control_flow_ops = tf
+tf.control_flow_ops = tf
 
 # grabbing the TF session from Keras backend
 sess = KTF.get_session()
@@ -71,7 +73,7 @@ def get_data(db_path, table):
 
 # directories
 base_path = os.path.dirname(os.path.abspath(__file__))  # base directory
-sql_path = os.path.join(base_path, 'data', 'ELEXON DATA.sqlite')  # SQL db directory
+sql_path = os.path.join(base_path, 'ELEXON DATA.sqlite')  # SQL db directory
 
 # saving run time for use in creating folder for this run of experiments
 run_name = str(datetime.datetime.now())
@@ -268,7 +270,7 @@ for mdl_index, mdl in enumerate(mdls_L):
     y = np.asarray(y).flatten()
 
     # saving our scaler objects for use later
-    pickle.dump(X_scaler, open(os.path.join(run_path, 'X_scaler - ' + mdl + '.pkl'), 'wb'), protocol=4)
+    pickle.dump(X_scaler, open(os.path.join(run_path, 'X_scaler - ' + mdl + '.pkl'), 'wb'), protocol=2)
 
     input_length = X_train.shape[1]
 
@@ -348,7 +350,7 @@ for mdl_index, mdl in enumerate(mdls_L):
             shuffle_weights(CV_network, initial_weights_CV)
             batch_size_CV = int(X_train[train].shape[0] / 3)
             CV_checkpointer = ModelCheckpoint(filepath=CV_model_path, monitor='loss', verbose=1, save_best_only=True)
-            CV_hist = CV_network.fit(X_train[train], y_train[train], nb_epoch=epochs, batch_size=batch_size_CV,
+            CV_hist = CV_network.fit(X_train[train], y_train[train], epochs=epochs, batch_size=batch_size_CV,
                                      callbacks=[CV_checkpointer], verbose=0)
             CV_network.load_weights(CV_model_path)
 
